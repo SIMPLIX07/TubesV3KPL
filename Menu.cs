@@ -20,7 +20,7 @@ namespace TubesV3
 
         public static void menuPelamar()
         {
-            Console.WriteLine("1. Lihat Lowongan");
+            Console.WriteLine("1. Lihat Lowongan \n2. Ajukan Lowongan");
         }
     }
 }

@@ -11,7 +11,7 @@ namespace TubesV3
         private string namaPelamar { get; set; }
         private string perusahaanTertarik { get; set; }
         private string posisi { get; set; }
-        private List<Keahlian> keahlian { get; set; }
+        public List<Keahlian> keahlian { get; set; }
 
         public LowonganPelamar(string namaPelamar, string perusahaanTertarik, string posisi, List<Keahlian> keahlian)
         {
@@ -36,9 +36,13 @@ namespace TubesV3
             return posisi;
         }
 
-        public List<Keahlian> getKeahlian()
+        public  void GetKeahlian()
         {
-            return keahlian;
+            foreach(Keahlian k in keahlian)
+            {
+                Console.WriteLine("Skill: " + k.skill + "Pengalaman: " + k.pengalaman);
+            }
         }
+
     }
 }

@@ -21,12 +21,14 @@ namespace TubesV3
             {
                 if (listLowongan[i].GetPerusahaanTertarik() == perusahaan)
                 {
-                    Console.WriteLine("Nama Pelamar: " + listLowongan[i].GetNamaPelamar()+ " \nPosisi yang diinginkan: " + listLowongan[i].GetPosisi() + "\nKeahlian: " + listLowongan[i].getKeahlian());
+                    Console.WriteLine("Nama Pelamar: " + listLowongan[i].GetNamaPelamar()+ " \nPosisi yang diinginkan: " + listLowongan[i].GetPosisi() + "\nKeahlian: " );
+                    listLowongan[i].GetKeahlian();
+                    Console.WriteLine("\n");
                 }
             }
         }
 
-        public static void accPelamar(int idxm, string perusahaan)
+        public static void accPelamar(string perusahaan)
         {
             getPelamarByPerusahaan(perusahaan);
             Console.WriteLine("1. Rekrut \n2. Delete \n3. Keluar");
@@ -36,28 +38,30 @@ namespace TubesV3
             {
                 if (hasilInput == 1)
                 {
-                    Console.WriteLine("Masukan index pelamar yang ingin direkrut");
+                    Console.WriteLine("Masukan nama pelamar yang ingin direkrut");
                     string input2 = Console.ReadLine();
-                    int hasilInput2 = int.Parse(input2);
-                    Pelamar newKaryawan;
-                    Perusahaan.addKaryawan(newKaryawan);
+                    Pelamar newKaryawan = DaftarSemuaPelamar.CocokanPelamar(input2);
+                    
+                    if (newKaryawan != null)
+                    {
+                        Perusahaan.addKaryawan(newKaryawan);
+                        listLowongan.RemoveAll(lowongan => lowongan.GetNamaPelamar() == input2);
+                        newKaryawan.status = true;
+
+                    }
                 } else if (hasilInput == 2)
                 {
-                    Console.WriteLine("Masukan index pelamar yang ingin dihapus");
+                    Console.WriteLine("Masukan nama pelamar yang ingin dihapus");
                     string input3 = Console.ReadLine();
-                    int hasilInput3 = int.Parse(input3);
-                    listLowongan.RemoveAt(hasilInput3);
-                    
+                    listLowongan.RemoveAll(lowongan => lowongan.GetNamaPelamar() == input3);
+
+
 
                 }
                 input = Console.ReadLine();
                 hasilInput = int.Parse(input);
             }
             
-        }
-        public static void deletePelamar(int idx)
-        {
-
         }
     }
 }

@@ -12,7 +12,8 @@ namespace TubesV3
         public string username { get; set; }
         public string password { get; set; }
         public string namaLengkap { get; set; }
-        public List<Keahlian> keahlian { get; set; }
+        public bool status { get; set; }
+        public  List<Keahlian> keahlian { get; set; }
         
 
         public Pelamar(string username, string password, string namaLengkap)
@@ -21,6 +22,7 @@ namespace TubesV3
             this.password = password;
             this.namaLengkap = namaLengkap;
             keahlian = new List<Keahlian>();
+            this.status = false;
         }
 
 
@@ -29,9 +31,14 @@ namespace TubesV3
             ListLowonganPerusahaan.getAllLowongan();
         }
 
-        public List<Keahlian> getKeahlian()
+        
+
+        public  void getAllKeahlian()
         {
-            return keahlian;
+            foreach(Keahlian k in keahlian)
+            {
+                Console.WriteLine("Skill: " + k.skill + "Pengalaman: " + k.pengalaman);
+            }
         }
 
     }

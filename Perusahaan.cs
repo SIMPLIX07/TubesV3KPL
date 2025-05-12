@@ -31,5 +31,15 @@ namespace TubesV3
         {
             daftarLowongan.Add(lowongan);
         }
+
+        public static void getAllKaryawan()
+        {
+            foreach (Pelamar karyawan in daftarKaryawan)
+            {
+                Console.WriteLine("Nama: " + karyawan.namaLengkap);
+                karyawan.getAllKeahlian();
+                Console.WriteLine();
+            }
+        }
     }
 }
