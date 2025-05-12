@@ -21,5 +21,10 @@ namespace TubesV3
             }
             return null;
         }
+
+        public void AddPelamar(Pelamar newPelamar)
+        {
+            semuaPelamar.Add(newPelamar);
+        }
     }
 }
