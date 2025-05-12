@@ -17,21 +17,23 @@ namespace TubesV3
         {
             this.username = username;
             this.password = password;
+            this.queuePerusahaan = new List<Perusahaan>();
+            this.daftarPerusahaanVerified = new List<Perusahaan>(); // ini penting!
         }
+
 
         public void menuAdmin()
         {
             Menu.menuAdmin();
         }
-        public void Verifikasi()
+        public void Verifikasi(QueuePerusahaan queue)
         {
-            if(QueuePerusahaan.isiList() == 0)
+            if(queue.isiList() == 0)
             {
                 Console.WriteLine("Tidak ada perusahaan yang mendaftar");
-            }else
-            {
-                queuePerusahaan = QueuePerusahaan.returnPerusahaan();
-                QueuePerusahaan.hapusIsilist();
+            }else{
+                queuePerusahaan = queue.returnPerusahaan();
+                queue.hapusIsilist();
 
                 for (int i = queuePerusahaan.Count - 1; i >= 0; i--)
                 {
@@ -39,7 +41,7 @@ namespace TubesV3
                     string input = Console.ReadLine();
                     if (input == "Y" || input == "y")
                     {
-                        DaftarPerusahaanVerified.addPerusahaan(queuePerusahaan[i]);
+                        this.daftarPerusahaanVerified.Add(queuePerusahaan[i]);
                         queuePerusahaan.RemoveAt(i);
 
                     }

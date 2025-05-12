@@ -16,12 +16,13 @@ namespace TubesV3
         public  List<Keahlian> keahlian { get; set; }
         
 
-        public Pelamar(string username, string password, string namaLengkap)
+        public Pelamar(string username, string password, string namaLengkap, Keahlian k)
         {
             this.username = username;
             this.password = password;
             this.namaLengkap = namaLengkap;
-            keahlian = new List<Keahlian>();
+            this.keahlian = new List<Keahlian>();
+            this.keahlian.Add(k);
             this.status = false;
         }
 
