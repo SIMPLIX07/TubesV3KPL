@@ -13,6 +13,7 @@ namespace TubesV3
         public string password { get; set; }
         public string namaLengkap { get; set; }
         public bool status { get; set; }
+        public PelamarState state { get; private set; }
         public  List<Keahlian> keahlian { get; set; }
         
 
@@ -41,7 +42,23 @@ namespace TubesV3
                 Console.WriteLine("Skill: " + k.skill + "Pengalaman: " + k.pengalaman);
             }
         }
+        public void Hire()
+        {
+            if (state == PelamarState.Registered)
+            {
+                state = PelamarState.Hired;
+                Console.WriteLine($"{namaLengkap} diterima bekerja.");
+            }
+            else
+            {
+                Console.WriteLine($"{namaLengkap} sudah berstatus Hired.");
+            }
+        }
 
+        public void PrintStatus()
+        {
+            Console.WriteLine($"Status {namaLengkap}: {state}");
+        }
     }
 }
 
