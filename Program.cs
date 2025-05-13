@@ -1,25 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Security.Cryptography.X509Certificates;
 using TubesV3;
 
 class Program
 {
+    delegate void MenuAction();
+
     static void Main(string[] args)
     {
         Admin admin = new Admin("admin", "admin123");
-        Perusahaan p1 = new Perusahaan("telkom", "123", "PT Maju Terus", "001");
-        Keahlian k = new Keahlian("IT Developer", "2 Tahun");
-        Pelamar p2 = new Pelamar("Budi", "Budios", "Budisantoso", k);
         QueuePerusahaan queue = new QueuePerusahaan();
         DaftarSemuaPelamar semuaPelamar = new DaftarSemuaPelamar();
         DaftarPerusahaanVerified daftarVerified = new DaftarPerusahaanVerified();
 
-
-        //daftarVerified.addPerusahaan(p1);
-        //queue.addPerusahaan(p1);
-        //semuaPelamar.AddPelamar(p2);
+        Dictionary<string, MenuAction> mainMenu = new Dictionary<string, MenuAction>
+        {
+            { "1", () => RegisterPerusahaan(queue) },
+            { "2", () => RegisterPelamar(semuaPelamar) },
+            { "3", () => AdminMenu(admin, queue, daftarVerified) },
+            { "4", () => LoginPerusahaan(daftarVerified) },
+            { "5", () => LoginPelamar(semuaPelamar) }
+        };
 
         string pilihan = "";
         while (pilihan != "0")
@@ -28,190 +29,216 @@ class Program
             Console.Write("Pilih menu: ");
             pilihan = Console.ReadLine();
 
-            switch (pilihan)
+            if (mainMenu.ContainsKey(pilihan))
             {
-                case "1":
-                    // Daftar Perusahaan
-                    Console.WriteLine("Masukkan Username: ");
-                    string usernamePerusahaan = Console.ReadLine();
-                    Console.WriteLine("Masukkan Password: ");
-                    string passwordPerusahaan = Console.ReadLine();
-                    Console.WriteLine("Masukkan Nama Perusahaan: ");
-                    string namaPerusahaan = Console.ReadLine();
-                    Console.WriteLine("Masukkan Nomor Perusahaan: ");
-                    string nomorPerusahaan = Console.ReadLine();
-
-                    Perusahaan newPerusahaan = new Perusahaan(usernamePerusahaan, passwordPerusahaan, namaPerusahaan, nomorPerusahaan);
-                    queue.addPerusahaan(newPerusahaan);
-                    break;
-
-                case "2":
-                    // Daftar Pelamar
-                    Console.WriteLine("Masukkan Username: ");
-                    string usernamePelamar = Console.ReadLine();
-                    Console.WriteLine("Masukkan Password: ");
-                    string passwordPelamar = Console.ReadLine();
-                    Console.WriteLine("Masukkan Nama Lengkap: ");
-                    string namaPelamar = Console.ReadLine();
-                    Console.WriteLine("Masukkan Skill: ");
-                    string skillPelamar = Console.ReadLine();
-                    Console.WriteLine("Masukkan Pengalaman: ");
-                    string pengalamanPelamar = Console.ReadLine();
-
-                    Keahlian keahlianBaru = new Keahlian(skillPelamar, pengalamanPelamar);
-                    Pelamar pelamarBaru = new Pelamar(usernamePelamar, passwordPelamar, namaPelamar, keahlianBaru);
-                    semuaPelamar.AddPelamar(pelamarBaru);
-                    break;
-
-                case "3":
-                    // Login Admin
-                    string menuAdmin = "";
-                    while (menuAdmin != "0")
-                    {
-                        Menu.menuAdmin();
-                        Console.Write("Pilih: ");
-                        menuAdmin = Console.ReadLine();
-
-                        switch (menuAdmin)
-                        {
-                            case "1":
-                                admin.Verifikasi(queue, daftarVerified);
-                                break;
-
-                            case "0":
-                                Console.WriteLine("Logout Dari Akun Admin\n");
-                                break;
-
-                            default:
-                                Console.WriteLine("Pilihan Menu Tidak ada\n");
-                                break;
-                        }
-                    }
-                    break;
-
-                case "4":
-                    // Login Perusahaan
-                    Console.Write("username: ");
-                    string usernamePerusahaanLog = Console.ReadLine();
-                    Console.Write("Password: ");
-                    string passwordPerusahaanLog = Console.ReadLine();
-
-                    bool perusahaanAsli = daftarVerified.cekPerusahaan(usernamePerusahaanLog, passwordPerusahaanLog);
-                    if (perusahaanAsli == true)
-                    {
-                        Perusahaan perusahaanLogin = daftarVerified.verifPerusahaan(usernamePerusahaanLog, passwordPerusahaanLog);
-
-                        string menuPerusahaan = "";
-                        while (menuPerusahaan != "0")
-                        {
-                            Menu.menuPerusahaan();
-                            Console.Write("Pilih: ");
-                            menuPerusahaan = Console.ReadLine();
-
-                            switch (menuPerusahaan)
-                            {
-                                case "1":
-                                    Console.Write("Judul: ");
-                                    string judul = Console.ReadLine();
-                                    Console.Write("Kriteria: ");
-                                    string kriteria = Console.ReadLine();
-                                    Console.Write("Deskripsi: ");
-                                    string deskripsi = Console.ReadLine();
-                                    Console.Write("Lokasi: ");
-                                    string lokasi = Console.ReadLine();
-                                    Console.Write("Gaji: ");
-                                    string gaji = Console.ReadLine();
-
-                                    Lowongan lowongan = new Lowongan(perusahaanLogin.namaPerusahaan, judul, kriteria, deskripsi, lokasi, gaji);
-                                    Perusahaan.addLowongan(lowongan);
-                                    ListLowonganPerusahaan.addLowongan(lowongan);
-                                    Console.WriteLine("Lowongan berhasil di-upload!\n");
-                                    break;
-
-                                case "2":
-                                    ListLowonganPelamar.accPelamar(perusahaanLogin.namaPerusahaan);
-                                    break;
-
-                                case "3":
-                                    Perusahaan.getAllKaryawan();
-                                    break;
-
-                                case "0":
-                                    Console.WriteLine("Logout Dari Akun Perusahaan\n");
-                                    break;
-
-                                default:
-                                    Console.WriteLine("Pilihan Menu Tidak ada\n");
-                                    break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Perusahaan tidak terdaftar\n");
-                    }
-                    break;
-
-                case "5":
-                    // Login Pelamar
-                    Console.WriteLine("Masukkan Username: ");
-                    string usernamePelaamrLog = Console.ReadLine();
-                    Console.WriteLine("Masukkan Password: ");
-                    string passwordPelamarLog = Console.ReadLine();
-                    Console.WriteLine("Masukkan Nama Perusahaan: ");
-
-                    bool pelamarAsli = semuaPelamar.verfikasiPelamar(usernamePelaamrLog, passwordPelamarLog);
-                    if (pelamarAsli == true)
-                    {
-                        Pelamar pelamarLogin = semuaPelamar.cariPelamar(usernamePelaamrLog, passwordPelamarLog);
-
-                        string menuPelamar = "";
-                        while (menuPelamar != "0")
-                        {
-                            Menu.menuPelamar();
-                            Console.Write("Pilih: ");
-                            menuPelamar = Console.ReadLine();
-
-                            switch (menuPelamar)
-                            {
-                                case "1":
-                                    Pelamar.getAllLowongan();
-                                    break;
-
-                                case "2":
-                                    Pelamar.getAllLowongan();
-                                    Console.Write("Masukkan Nama Perusahaan: ");
-                                    string perusahaan = Console.ReadLine();
-                                    Console.Write("Masukkan Posisi: ");
-                                    string posisi = Console.ReadLine();
-                                    LowonganPelamar lp = new LowonganPelamar(pelamarLogin.namaLengkap, perusahaan, posisi, pelamarLogin.keahlian);
-                                    ListLowonganPelamar.addLowongan(lp);
-                                    Console.WriteLine("Lowongan berhasil diajukan!\n");
-                                    break;
-
-                                case "0":
-                                    Console.WriteLine("Logout Dari Akun Pelamar");
-                                    break;
-
-                                default:
-                                    Console.WriteLine("Pilihan Menu Tidak ada\n");
-                                    break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Pelamar tidak terdaftar");
-                    }
-                    break;
-
-                default:
-                    Console.WriteLine("Menu tidak ada");
-                    break;
+                mainMenu[pilihan]();
+            }
+            else
+            {
+                Console.WriteLine("Menu tidak ada");
             }
         }
 
         Console.WriteLine("Terima kasih telah menggunakan sistem rekrutmen!");
     }
 
+    // ================== MENU PERUSAHAAN ====================
+    static void RegisterPerusahaan(QueuePerusahaan queue)
+    {
+        Console.WriteLine("Masukkan Username: ");
+        string usernamePerusahaan = Console.ReadLine();
+        Console.WriteLine("Masukkan Password: ");
+        string passwordPerusahaan = Console.ReadLine();
+        Console.WriteLine("Masukkan Nama Perusahaan: ");
+        string namaPerusahaan = Console.ReadLine();
+        Console.WriteLine("Masukkan Nomor Perusahaan: ");
+        string nomorPerusahaan = Console.ReadLine();
+
+        Perusahaan newPerusahaan = new Perusahaan(usernamePerusahaan, passwordPerusahaan, namaPerusahaan, nomorPerusahaan);
+        queue.addPerusahaan(newPerusahaan);
+        Console.WriteLine("Perusahaan berhasil didaftarkan.\n");
+    }
+
+    static void LoginPerusahaan(DaftarPerusahaanVerified daftarVerified)
+    {
+        Console.Write("Username: ");
+        string username = Console.ReadLine();
+        Console.Write("Password: ");
+        string password = Console.ReadLine();
+
+        if (daftarVerified.cekPerusahaan(username, password))
+        {
+            Perusahaan perusahaanLogin = daftarVerified.verifPerusahaan(username, password);
+            PerusahaanMenu(perusahaanLogin);
+        }
+        else
+        {
+            Console.WriteLine("Perusahaan tidak terdaftar\n");
+        }
+    }
+
+    static void PerusahaanMenu(Perusahaan perusahaan)
+    {
+        Dictionary<string, MenuAction> perusahaanMenu = new Dictionary<string, MenuAction>
+        {
+            { "1", () => PostLowongan(perusahaan) },
+            { "2", () => ReviewPelamar(perusahaan) },
+            { "3", () => LihatKaryawan(perusahaan) }
+        };
+
+        string pilihan = "";
+        while (pilihan != "0")
+        {
+            Menu.menuPerusahaan();
+            Console.Write("Pilih: ");
+            pilihan = Console.ReadLine();
+
+            if (perusahaanMenu.ContainsKey(pilihan))
+            {
+                perusahaanMenu[pilihan]();
+            }
+            else
+            {
+                Console.WriteLine("Pilihan tidak ada");
+            }
+        }
+    }
+
+    static void PostLowongan(Perusahaan perusahaan)
+    {
+        Console.Write("Judul: ");
+        string judul = Console.ReadLine();
+        Console.Write("Kriteria: ");
+        string kriteria = Console.ReadLine();
+        Console.Write("Deskripsi: ");
+        string deskripsi = Console.ReadLine();
+        Console.Write("Lokasi: ");
+        string lokasi = Console.ReadLine();
+        Console.Write("Gaji: ");
+        string gaji = Console.ReadLine();
+
+        Lowongan lowongan = new Lowongan(perusahaan.namaPerusahaan, judul, kriteria, deskripsi, lokasi, gaji);
+        Perusahaan.addLowongan(lowongan);
+        ListLowonganPerusahaan.addLowongan(lowongan);
+        Console.WriteLine("Lowongan berhasil diposting!\n");
+    }
+
+    static void ReviewPelamar(Perusahaan perusahaan)
+    {
+        Console.WriteLine("Review pelamar untuk perusahaan: " + perusahaan.namaPerusahaan);
+        ListLowonganPelamar.accPelamar(perusahaan.namaPerusahaan);
+    }
+
+    static void LihatKaryawan(Perusahaan perusahaan)
+    {
+        Perusahaan.getAllKaryawan();
+    }
+
+    // ================== MENU PELAMAR ====================
+    static void RegisterPelamar(DaftarSemuaPelamar semuaPelamar)
+    {
+        Console.WriteLine("Masukkan Username: ");
+        string username = Console.ReadLine();
+        Console.WriteLine("Masukkan Password: ");
+        string password = Console.ReadLine();
+        Console.WriteLine("Masukkan Nama Lengkap: ");
+        string namaLengkap = Console.ReadLine();
+        Console.WriteLine("Masukkan Skill: ");
+        string skill = Console.ReadLine();
+        Console.WriteLine("Masukkan Pengalaman: ");
+        string pengalaman = Console.ReadLine();
+
+        Keahlian keahlian = new Keahlian(skill, pengalaman);
+        Pelamar pelamar = new Pelamar(username, password, namaLengkap, keahlian);
+        semuaPelamar.AddPelamar(pelamar);
+        Console.WriteLine("Pelamar berhasil didaftarkan.\n");
+    }
+
+    static void LoginPelamar(DaftarSemuaPelamar semuaPelamar)
+    {
+        Console.Write("Username: ");
+        string username = Console.ReadLine();
+        Console.Write("Password: ");
+        string password = Console.ReadLine();
+
+        if (semuaPelamar.verfikasiPelamar(username, password))
+        {
+            Pelamar pelamar = semuaPelamar.cariPelamar(username, password);
+            PelamarMenu(pelamar);
+        }
+        else
+        {
+            Console.WriteLine("Pelamar tidak terdaftar\n");
+        }
+    }
+
+    static void PelamarMenu(Pelamar pelamar)
+    {
+        Dictionary<string, MenuAction> pelamarMenu = new Dictionary<string, MenuAction>
+        {
+            { "1", () => LihatLowongan() },
+            { "2", () => LamarLowongan(pelamar) }
+        };
+
+        string pilihan = "";
+        while (pilihan != "0")
+        {
+            Menu.menuPelamar();
+            Console.Write("Pilih: ");
+            pilihan = Console.ReadLine();
+
+            if (pelamarMenu.ContainsKey(pilihan))
+            {
+                pelamarMenu[pilihan]();
+            }
+            else
+            {
+                Console.WriteLine("Pilihan tidak ada");
+            }
+        }
+    }
+
+    static void LihatLowongan()
+    {
+        Pelamar.getAllLowongan();
+    }
+
+    static void LamarLowongan(Pelamar pelamar)
+    {
+        Pelamar.getAllLowongan();
+        Console.Write("Nama Perusahaan: ");
+        string perusahaan = Console.ReadLine();
+        Console.Write("Posisi: ");
+        string posisi = Console.ReadLine();
+
+        LowonganPelamar lp = new LowonganPelamar(pelamar.namaLengkap, perusahaan, posisi, pelamar.keahlian);
+        ListLowonganPelamar.addLowongan(lp);
+        Console.WriteLine("Lamaran berhasil diajukan!\n");
+    }
+
+    // ================== MENU ADMIN ====================
+    static void AdminMenu(Admin admin, QueuePerusahaan queue, DaftarPerusahaanVerified daftarVerified)
+    {
+        Dictionary<string, MenuAction> adminMenu = new Dictionary<string, MenuAction>
+        {
+            { "1", () => admin.Verifikasi(queue, daftarVerified) }
+        };
+
+        string pilihan = "";
+        while (pilihan != "0")
+        {
+            Menu.menuAdmin();
+            Console.Write("Pilih: ");
+            pilihan = Console.ReadLine();
+
+            if (adminMenu.ContainsKey(pilihan))
+            {
+                adminMenu[pilihan]();
+            }
+            else
+            {
+                Console.WriteLine("Pilihan tidak ada");
+            }
+        }
+    }
 }
