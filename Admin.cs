@@ -26,14 +26,13 @@ namespace TubesV3
         {
             Menu.menuAdmin();
         }
-        public void Verifikasi(QueuePerusahaan queue)
+        public void Verifikasi(QueuePerusahaan queue, DaftarPerusahaanVerified daftar)
         {
             if(queue.isiList() == 0)
             {
                 Console.WriteLine("Tidak ada perusahaan yang mendaftar");
             }else{
                 queuePerusahaan = queue.returnPerusahaan();
-                queue.hapusIsilist();
 
                 for (int i = queuePerusahaan.Count - 1; i >= 0; i--)
                 {
@@ -41,7 +40,7 @@ namespace TubesV3
                     string input = Console.ReadLine();
                     if (input == "Y" || input == "y")
                     {
-                        this.daftarPerusahaanVerified.Add(queuePerusahaan[i]);
+                        daftar.addPerusahaan(queuePerusahaan[i]);
                         queuePerusahaan.RemoveAt(i);
 
                     }
@@ -49,9 +48,9 @@ namespace TubesV3
                     {
                         queuePerusahaan.RemoveAt(i);
                     }
-                    
                 }
             }
+            queue.hapusIsilist();
         }
     }
 }

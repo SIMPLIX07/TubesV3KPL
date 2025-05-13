@@ -18,7 +18,7 @@ namespace TubesV3
         public static void getAllLowongan(){
             for (int i=0; i<listLowongan.Count(); i++)
             {
-                Console.WriteLine("Posisi: " + listLowongan[i].GetTitle() + " \nKriteria: " + listLowongan[i].GetKriteria() + " \nDeskripsi: " + listLowongan[i].GetDeskripsi() +
+                Console.WriteLine("Perusahaan: " + listLowongan[i].GetNamaPerusahaan() + "\nPosisi: " + listLowongan[i].GetTitle() + " \nKriteria: " + listLowongan[i].GetKriteria() + " \nDeskripsi: " + listLowongan[i].GetDeskripsi() +
                     " \nLokasi: " + listLowongan[i].GetLokasi() + " \nGaji: " + listLowongan[i].GetGaji() + "\n");
             }
         }

@@ -8,19 +8,24 @@ namespace TubesV3
 {
     public class Lowongan
     {
+        public string namaPerusahaan { get; set; }
         public string title { get; set; }
         public string kriteria { get; set; }
         public string deskripsi { get; set; }
         public string lokasi { get; set; }
         public string gaji { get; set; }
 
-        public Lowongan(string title, string kriteria, string deskripsi, string lokasi, string gaji)
+        public Lowongan(string namaPerusahaan, string title, string kriteria, string deskripsi, string lokasi, string gaji)
         {
+            this.namaPerusahaan = namaPerusahaan;
             this.title = title;
             this.kriteria = kriteria;
             this.deskripsi = deskripsi;
             this.lokasi = lokasi;
             this.gaji = gaji;
+        }
+        public string GetNamaPerusahaan() {
+            return namaPerusahaan;
         }
         public string GetTitle()
         {

@@ -26,5 +26,28 @@ namespace TubesV3
         {
             semuaPelamar.Add(newPelamar);
         }
+
+        public bool verfikasiPelamar(string username, string password) {
+            bool confirmasi = false;
+            foreach (Pelamar p in semuaPelamar)
+            {
+                if (p.username == username && p.password == password) {
+                    confirmasi = true;
+                }
+            }
+            return confirmasi;
+        }
+
+        public Pelamar cariPelamar(string username, string password) {
+            
+            foreach (Pelamar p in semuaPelamar)
+            {
+                if (p.username == username && p.password == password){
+                    return p;
+                }
+            }
+
+            return null;
+        }
     }
 }

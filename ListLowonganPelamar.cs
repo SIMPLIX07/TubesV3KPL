@@ -31,35 +31,41 @@ namespace TubesV3
         public static void accPelamar(string perusahaan)
         {
             getPelamarByPerusahaan(perusahaan);
-            Console.WriteLine("1. Rekrut \n2. Delete \n3. Keluar");
+            Console.WriteLine("1. Rekrut \n2. Delete \n0. Keluar");
             string input = Console.ReadLine();
-            int hasilInput = int.Parse(input);
-            while (hasilInput != 3)
+            while (input != "0")
             {
-                if (hasilInput == 1)
-                {
-                    Console.WriteLine("Masukan nama pelamar yang ingin direkrut");
-                    string input2 = Console.ReadLine();
-                    Pelamar newKaryawan = DaftarSemuaPelamar.CocokanPelamar(input2);
-                    
-                    if (newKaryawan != null)
-                    {
-                        Perusahaan.addKaryawan(newKaryawan);
-                        listLowongan.RemoveAll(lowongan => lowongan.GetNamaPelamar() == input2);
-                        newKaryawan.status = true;
+                switch(input) {
+                    case "1": 
+                        Console.WriteLine("Masukan nama pelamar yang ingin direkrut");
+                        string input2 = Console.ReadLine();
+                        Pelamar newKaryawan = DaftarSemuaPelamar.CocokanPelamar(input2);
+                        
+                        if (newKaryawan != null)
+                        {
+                            Perusahaan.addKaryawan(newKaryawan);
+                            listLowongan.RemoveAll(lowongan => lowongan.GetNamaPelamar() == input2);
+                            newKaryawan.status = true;
 
-                    }
-                } else if (hasilInput == 2)
-                {
-                    Console.WriteLine("Masukan nama pelamar yang ingin dihapus");
+                        }else {
+                            Console.WriteLine("Karyawan tidak terdaftar");
+                        }
+                    break;
+
+                    case "2": 
+                        Console.WriteLine("Masukan nama pelamar yang ingin dihapus");
                     string input3 = Console.ReadLine();
                     listLowongan.RemoveAll(lowongan => lowongan.GetNamaPelamar() == input3);
 
+                    break;
 
-
+                    default:
+                        Console.WriteLine("Menu tidak ada");
+                    break;
                 }
+                
+                Console.WriteLine("1. Rekrut \n2. Delete \n0. Keluar");
                 input = Console.ReadLine();
-                hasilInput = int.Parse(input);
             }
             
         }
