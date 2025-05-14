@@ -25,6 +25,7 @@ namespace TubesV3
             this.keahlian = new List<Keahlian>();
             this.keahlian.Add(k);
             this.status = false;
+            this.state = PelamarState.Registered;
         }
 
 
