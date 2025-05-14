@@ -8,11 +8,13 @@ namespace TubesV3
 {
     public class Admin
     {
-        private string username { get; set; }
-        private string password { get; set; }
+        public int Id { get; set; }
+        public string username { get; private set; }
+        public string password { get; private set; }
         public List<Perusahaan> queuePerusahaan { get; set; }
         public List<Perusahaan> daftarPerusahaanVerified { get; set; }
 
+        public Admin() { }
         public Admin(string username, string password)
         {
             this.username = username;
@@ -26,31 +28,47 @@ namespace TubesV3
         {
             Menu.menuAdmin();
         }
-        public void Verifikasi(QueuePerusahaan queue, DaftarPerusahaanVerified daftar)
+        public void Verifikasi(List<Perusahaan> daftar)
         {
-            if(queue.isiList() == 0)
+            if (daftar == null || daftar.Count == 0)
             {
                 Console.WriteLine("Tidak ada perusahaan yang mendaftar");
-            }else{
-                queuePerusahaan = queue.returnPerusahaan();
+                return;
+            }
 
-                for (int i = queuePerusahaan.Count - 1; i >= 0; i--)
+            List<Perusahaan> notVerified = new List<Perusahaan>();
+
+            foreach (Perusahaan perusahaan in daftar)
+            {
+                if (!perusahaan.IsVerified)
                 {
-                    Console.WriteLine("Nama Perusahaan: " + queuePerusahaan[i].namaPerusahaan + "\n Nomor Perusahaan: " + queuePerusahaan[i].nomorPerusahaan + "\nApakah anda ACC?");
+                    Console.WriteLine("Nama Perusahaan: " + perusahaan.namaPerusahaan +
+                                      "\nNomor Perusahaan: " + perusahaan.nomorPerusahaan +
+                                      "\nApakah anda ACC? (Y/N)");
                     string input = Console.ReadLine();
+
                     if (input == "Y" || input == "y")
                     {
-                        daftar.addPerusahaan(queuePerusahaan[i]);
-                        queuePerusahaan.RemoveAt(i);
-
+                        perusahaan.IsVerified = true;
+                        // Jangan save sekarang, tunggu di akhir
                     }
                     else if (input == "N" || input == "n")
                     {
-                        queuePerusahaan.RemoveAt(i);
+                        notVerified.Add(perusahaan);
                     }
                 }
             }
-            queue.hapusIsilist();
+
+            Database.Context.Perusahaans.UpdateRange(daftar.Where(p => p.IsVerified));
+
+            if (notVerified.Count > 0)
+            {
+                Database.Context.Perusahaans.RemoveRange(notVerified);
+            }
+            Database.Context.SaveChanges();
         }
+
     }
+
+
 }

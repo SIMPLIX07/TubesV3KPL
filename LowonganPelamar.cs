@@ -8,41 +8,51 @@ namespace TubesV3
 {
     public class LowonganPelamar
     {
-        private string namaPelamar { get; set; }
-        private string perusahaanTertarik { get; set; }
-        private string posisi { get; set; }
-        public List<Keahlian> keahlian { get; set; }
+        public int Id { get; set; }
+        public int PelamarId { get; set; }
+        public Pelamar Pelamar { get; set; }
 
-        public LowonganPelamar(string namaPelamar, string perusahaanTertarik, string posisi, List<Keahlian> keahlian)
+        public int PerusahaanId { get; set; }
+        public Perusahaan Perusahaan { get; set; }
+
+        public int LowonganId { get; set; }
+        public Lowongan Lowongan { get; set; }
+
+        public LowonganPelamar() { }
+        public LowonganPelamar(int pelamarId, int perusahaanId, int lowonganId)
         {
-            this.namaPelamar = namaPelamar;
-            this.perusahaanTertarik = perusahaanTertarik;
-            this.posisi = posisi;
-            this.keahlian = keahlian;
+            PelamarId = pelamarId;
+            PerusahaanId = perusahaanId;
+            LowonganId = lowonganId;
         }
+
+        public static List<LowonganPelamar> semuaLowonganPelamar = Database.Context.Lamarans.ToList();
 
         public string GetPerusahaanTertarik()
         {
-            return perusahaanTertarik;
+            return Perusahaan.namaPerusahaan;
         }
 
         public string GetNamaPelamar()
         {
-            return namaPelamar;
+            return Pelamar.namaLengkap;
         }
 
         public string GetPosisi()
         {
-            return posisi;
+            return Lowongan.kriteria;
         }
 
-        public  void GetKeahlian()
+        public void getAllPelamarByPerusahaanId(List<LowonganPelamar> listlowongan, int id)
         {
-            foreach(Keahlian k in keahlian)
+            foreach (LowonganPelamar list in listlowongan)
             {
-                Console.WriteLine("Skill: " + k.skill + "Pengalaman: " + k.pengalaman);
+                if(list.Perusahaan.Id == id){
+                    Console.WriteLine("Nama: " + list.Pelamar.namaLengkap + "\nPosisi: " + list.Lowongan.title + " \nSkill: " + list.Pelamar.skill + " \nPengalaman: " + list.Pelamar.pengalaman);
+                }
+                
             }
+            
         }
-
     }
 }
