@@ -1,13 +1,19 @@
-﻿namespace TubesV3
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace TubesV3
 {
     public class DaftarPerusahaanVerified
     {
         public static List<Perusahaan> legalCompany { get; set; } = new List<Perusahaan>();
 
-        public void addPerusahaan(Perusahaan masukan)
-        {
-            legalCompany.Add(masukan); // Menambahkan perusahaan ke dalam static list
+        public void initializeDataPerusahaanVerified(List<Perusahaan> verified){
+            foreach(Perusahaan perusahaan in verified){
+               if(perusahaan.IsVerified){
+                    legalCompany.Add(perusahaan);
+               }
+            }
         }
+
         public bool cekPerusahaan(string username, string password) {
             bool confirmasi = false;
             foreach (Perusahaan p in legalCompany)
@@ -17,6 +23,10 @@
                 }
             }
             return confirmasi;
+        }
+
+        public Perusahaan cekIdPerusahaan(string nama) {
+            return legalCompany.FirstOrDefault(p => p.namaPerusahaan == nama);
         }
 
         public Perusahaan verifPerusahaan(string username, string password) {

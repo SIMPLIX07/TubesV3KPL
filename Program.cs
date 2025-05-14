@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using TubesV3;
 
 class Program
@@ -8,18 +9,25 @@ class Program
 
     static void Main(string[] args)
     {
+        string connectionString = "server=localhost;port=3306;database=pencari_kerja;user=root;password=";
+        Database.Init(connectionString);
+        // Menerapkan Pemanggilan Api
+
+        List<Lowongan> semuaLowongan = Database.Context.Lowongans.ToList();
+
         Admin admin = new Admin("admin", "admin123");
         QueuePerusahaan queue = new QueuePerusahaan();
+
         DaftarSemuaPelamar semuaPelamar = new DaftarSemuaPelamar();
         DaftarPerusahaanVerified daftarVerified = new DaftarPerusahaanVerified();
 
         Dictionary<string, MenuAction> mainMenu = new Dictionary<string, MenuAction>
         {
-            { "1", () => RegisterPerusahaan(queue) },
-            { "2", () => RegisterPelamar(semuaPelamar) },
-            { "3", () => AdminMenu(admin, queue, daftarVerified) },
+            { "1", () => RegisterPerusahaan() },
+            { "2", () => RegisterPelamar() },
+            { "3", () => AdminMenu(admin) },
             { "4", () => LoginPerusahaan(daftarVerified) },
-            { "5", () => LoginPelamar(semuaPelamar) }
+            { "5", () => LoginPelamar(semuaPelamar, daftarVerified) }
         };
 
         string pilihan = "";
@@ -42,8 +50,7 @@ class Program
         Console.WriteLine("Terima kasih telah menggunakan sistem rekrutmen!");
     }
 
-    // ================== MENU PERUSAHAAN ====================
-    static void RegisterPerusahaan(QueuePerusahaan queue)
+    static void RegisterPerusahaan()
     {
         Console.WriteLine("Masukkan Username: ");
         string usernamePerusahaan = Console.ReadLine();
@@ -55,8 +62,9 @@ class Program
         string nomorPerusahaan = Console.ReadLine();
 
         Perusahaan newPerusahaan = new Perusahaan(usernamePerusahaan, passwordPerusahaan, namaPerusahaan, nomorPerusahaan);
-        queue.addPerusahaan(newPerusahaan);
-        Console.WriteLine("Perusahaan berhasil didaftarkan.\n");
+        Database.Context.Perusahaans.Add(newPerusahaan);
+        Database.Context.SaveChanges();
+        Console.WriteLine("berhasil didaftarkan.\n");
     }
 
     static void LoginPerusahaan(DaftarPerusahaanVerified daftarVerified)
@@ -66,6 +74,9 @@ class Program
         Console.Write("Password: ");
         string password = Console.ReadLine();
 
+
+        daftarVerified.initializeDataPerusahaanVerified(Database.Context.Perusahaans.ToList());
+
         if (daftarVerified.cekPerusahaan(username, password))
         {
             Perusahaan perusahaanLogin = daftarVerified.verifPerusahaan(username, password);
@@ -73,7 +84,7 @@ class Program
         }
         else
         {
-            Console.WriteLine("Perusahaan tidak terdaftar\n");
+            Console.WriteLine("Perusahaan tidak terdaftar Atau Perusahaan tidak Verified\n");
         }
     }
 
@@ -118,24 +129,23 @@ class Program
         string gaji = Console.ReadLine();
 
         Lowongan lowongan = new Lowongan(perusahaan.namaPerusahaan, judul, kriteria, deskripsi, lokasi, gaji);
-        Perusahaan.addLowongan(lowongan);
-        ListLowonganPerusahaan.addLowongan(lowongan);
+        Database.Context.Lowongans.Add(lowongan);
+        Database.Context.SaveChanges();
         Console.WriteLine("Lowongan berhasil diposting!\n");
     }
 
     static void ReviewPelamar(Perusahaan perusahaan)
     {
         Console.WriteLine("Review pelamar untuk perusahaan: " + perusahaan.namaPerusahaan);
-        ListLowonganPelamar.accPelamar(perusahaan.namaPerusahaan);
+        perusahaan.accPelamar(perusahaan);
     }
 
     static void LihatKaryawan(Perusahaan perusahaan)
     {
-        Perusahaan.getAllKaryawan();
+        Perusahaan.getAllKaryawan(perusahaan);
     }
 
-    // ================== MENU PELAMAR ====================
-    static void RegisterPelamar(DaftarSemuaPelamar semuaPelamar)
+    static void RegisterPelamar()
     {
         Console.WriteLine("Masukkan Username: ");
         string username = Console.ReadLine();
@@ -148,13 +158,15 @@ class Program
         Console.WriteLine("Masukkan Pengalaman: ");
         string pengalaman = Console.ReadLine();
 
-        Keahlian keahlian = new Keahlian(skill, pengalaman);
-        Pelamar pelamar = new Pelamar(username, password, namaLengkap, keahlian);
-        semuaPelamar.AddPelamar(pelamar);
+        Pelamar pelamar = new Pelamar(username, password, namaLengkap, skill, pengalaman);
+
+        Database.Context.Pelamars.Add(pelamar);
+        Database.Context.SaveChanges();
+
         Console.WriteLine("Pelamar berhasil didaftarkan.\n");
     }
 
-    static void LoginPelamar(DaftarSemuaPelamar semuaPelamar)
+    static void LoginPelamar(DaftarSemuaPelamar semuaPelamar, DaftarPerusahaanVerified daftar)
     {
         Console.Write("Username: ");
         string username = Console.ReadLine();
@@ -164,7 +176,7 @@ class Program
         if (semuaPelamar.verfikasiPelamar(username, password))
         {
             Pelamar pelamar = semuaPelamar.cariPelamar(username, password);
-            PelamarMenu(pelamar);
+            PelamarMenu(pelamar, daftar);
         }
         else
         {
@@ -172,12 +184,15 @@ class Program
         }
     }
 
-    static void PelamarMenu(Pelamar pelamar)
+    static void PelamarMenu(Pelamar pelamar, DaftarPerusahaanVerified daftar)
     {
+        List<Lowongan> lowongan = Database.Context.Lowongans.ToList();
+        daftar.initializeDataPerusahaanVerified(Database.Context.Perusahaans.ToList());
+
         Dictionary<string, MenuAction> pelamarMenu = new Dictionary<string, MenuAction>
         {
-            { "1", () => LihatLowongan() },
-            { "2", () => LamarLowongan(pelamar) }
+            { "1", () => LihatLowongan(lowongan) },
+            { "2", () => LamarLowongan(pelamar, daftar, lowongan) }
         };
 
         string pilihan = "";
@@ -198,30 +213,50 @@ class Program
         }
     }
 
-    static void LihatLowongan()
+    static void LihatLowongan(List<Lowongan> lowongan)
     {
-        Pelamar.getAllLowongan();
+        Lowongan lowongans = new Lowongan();
+        lowongans.getAllLowongan(lowongan);
     }
 
-    static void LamarLowongan(Pelamar pelamar)
+    static void LamarLowongan(Pelamar pelamar, DaftarPerusahaanVerified daftar, List<Lowongan> lowongan)
     {
-        Pelamar.getAllLowongan();
+        Lowongan lowongans = new Lowongan();
+        lowongans.getAllLowongan(lowongan);
+
         Console.Write("Nama Perusahaan: ");
         string perusahaan = Console.ReadLine();
         Console.Write("Posisi: ");
         string posisi = Console.ReadLine();
 
-        LowonganPelamar lp = new LowonganPelamar(pelamar.namaLengkap, perusahaan, posisi, pelamar.keahlian);
-        ListLowonganPelamar.addLowongan(lp);
+        Lowongan lowonganDipilih = lowongans.getLowonganByPosisi(posisi, lowongan);
+        if (lowonganDipilih == null)
+        {
+            Console.WriteLine("Lowongan tidak ditemukan. Pastikan posisi benar.\n");
+            return;
+        }
+
+        // Ambil ID perusahaan yang sudah terverifikasi
+        Perusahaan perusahaanId = daftar.cekIdPerusahaan(perusahaan);
+        if (perusahaanId == null)
+        {
+            Console.WriteLine("Perusahaan tidak terverifikasi atau tidak ditemukan.\n");
+            return;
+        }
+
+        LowonganPelamar lp = new LowonganPelamar(pelamar.Id, perusahaanId.Id, lowonganDipilih.Id);
+        Database.Context.Lamarans.Add(lp);
+        Database.Context.SaveChanges();
+
         Console.WriteLine("Lamaran berhasil diajukan!\n");
     }
 
-    // ================== MENU ADMIN ====================
-    static void AdminMenu(Admin admin, QueuePerusahaan queue, DaftarPerusahaanVerified daftarVerified)
+    static void AdminMenu(Admin admin)
     {
+        List<Perusahaan> daftarVerified = Database.Context.Perusahaans.ToList();
         Dictionary<string, MenuAction> adminMenu = new Dictionary<string, MenuAction>
         {
-            { "1", () => admin.Verifikasi(queue, daftarVerified) }
+            { "1", () => admin.Verifikasi(daftarVerified) }
         };
 
         string pilihan = "";

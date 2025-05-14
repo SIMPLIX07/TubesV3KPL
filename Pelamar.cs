@@ -3,27 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using TubesV3;
 
 namespace TubesV3
 {
     public class Pelamar
     {
+        public int Id { get; set; }
         public string username { get; set; }
         public string password { get; set; }
         public string namaLengkap { get; set; }
         public bool status { get; set; }
         public PelamarState state { get; private set; }
-        public  List<Keahlian> keahlian { get; set; }
+        public string skill { get; set; }
+        public string pengalaman { get; set; }
         
-
-        public Pelamar(string username, string password, string namaLengkap, Keahlian k)
+        public Pelamar(){}
+        public Pelamar(string username, string password, string namaLengkap, string skill, string pengalaman)
         {
             this.username = username;
             this.password = password;
             this.namaLengkap = namaLengkap;
-            this.keahlian = new List<Keahlian>();
-            this.keahlian.Add(k);
+            this.skill = skill;
+            this.pengalaman = pengalaman;
             this.status = false;
             this.state = PelamarState.Registered;
         }
@@ -35,14 +38,6 @@ namespace TubesV3
         }
 
         
-
-        public  void getAllKeahlian()
-        {
-            foreach(Keahlian k in keahlian)
-            {
-                Console.WriteLine("Skill: " + k.skill + "Pengalaman: " + k.pengalaman);
-            }
-        }
         public void Hire()
         {
             if (state == PelamarState.Registered)
@@ -60,6 +55,8 @@ namespace TubesV3
         {
             Console.WriteLine($"Status {namaLengkap}: {state}");
         }
+
+        
     }
 }
 
