@@ -22,7 +22,7 @@ namespace TubesV3
                 if (listLowongan[i].GetPerusahaanTertarik() == perusahaan)
                 {
                     Console.WriteLine("Nama Pelamar: " + listLowongan[i].GetNamaPelamar()+ " \nPosisi yang diinginkan: " + listLowongan[i].GetPosisi() + "\nKeahlian: " );
-                    listLowongan[i].GetKeahlian();
+                    
                     Console.WriteLine("\n");
                 }
             }
@@ -46,6 +46,7 @@ namespace TubesV3
                             Perusahaan.addKaryawan(newKaryawan);
                             listLowongan.RemoveAll(lowongan => lowongan.GetNamaPelamar() == input2);
                             newKaryawan.status = true;
+                            newKaryawan.Hire();
 
                         }else {
                             Console.WriteLine("Karyawan tidak terdaftar");

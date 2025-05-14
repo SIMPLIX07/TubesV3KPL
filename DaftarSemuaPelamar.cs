@@ -8,7 +8,7 @@ namespace TubesV3
 {
     public class DaftarSemuaPelamar
     {
-        public static List<Pelamar> semuaPelamar = new List<Pelamar>();
+        public static List<Pelamar> semuaPelamar = Database.Context.Pelamars.ToList();
 
         public static Pelamar CocokanPelamar(string nama)
         {
@@ -22,9 +22,15 @@ namespace TubesV3
             return null;
         }
 
-        public void AddPelamar(Pelamar newPelamar)
+        public static int findPelamarByNama(string nama)
         {
-            semuaPelamar.Add(newPelamar);
+            foreach(Pelamar pelamar in semuaPelamar){
+                if (pelamar.namaLengkap == nama)
+                {
+                    return pelamar.Id;
+                }
+            }
+            return -1;
         }
 
         public bool verfikasiPelamar(string username, string password) {
