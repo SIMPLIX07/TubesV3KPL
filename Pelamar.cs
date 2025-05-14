@@ -28,6 +28,7 @@ namespace TubesV3
             this.skill = skill;
             this.pengalaman = pengalaman;
             this.status = false;
+            this.state = PelamarState.Registered;
         }
 
 
