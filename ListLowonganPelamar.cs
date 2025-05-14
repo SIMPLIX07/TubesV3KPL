@@ -46,6 +46,7 @@ namespace TubesV3
                             Perusahaan.addKaryawan(newKaryawan);
                             listLowongan.RemoveAll(lowongan => lowongan.GetNamaPelamar() == input2);
                             newKaryawan.status = true;
+                            newKaryawan.Hire();
 
                         }else {
                             Console.WriteLine("Karyawan tidak terdaftar");
