@@ -13,10 +13,15 @@ class Program
         Database.Init(connectionString);
         // Menerapkan Pemanggilan Api
 
+        ConfigPelamar.InitializeDefaultPelamars();
+
+
         List<Lowongan> semuaLowongan = Database.Context.Lowongans.ToList();
 
         Admin admin = new Admin("admin", "admin123");
         QueuePerusahaan queue = new QueuePerusahaan();
+
+        
 
         DaftarSemuaPelamar semuaPelamar = new DaftarSemuaPelamar();
         DaftarPerusahaanVerified daftarVerified = new DaftarPerusahaanVerified();

@@ -30,9 +30,11 @@ namespace TubesV3
         }
         public void Verifikasi(List<Perusahaan> daftar)
         {
-            if (daftar == null || daftar.Count == 0)
+            List<Perusahaan> belumVerifikasi = daftar.Where(p => !p.IsVerified).ToList();
+
+            if (belumVerifikasi == null || belumVerifikasi.Count == 0)
             {
-                Console.WriteLine("Tidak ada perusahaan yang mendaftar");
+                Console.WriteLine("Tidak ada perusahaan yang mendaftar (semua sudah diverifikasi)");
                 return;
             }
 
@@ -69,6 +71,4 @@ namespace TubesV3
         }
 
     }
-
-
 }
