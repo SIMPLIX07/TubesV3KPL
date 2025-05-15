@@ -1,0 +1,16 @@
+[
+    {
+      "username": "telkom",
+      "password": "123",
+      "namaPerusahaan": "Telkomsel",
+      "nomorPerusahaan": "22211",
+      "IsVerified": true
+    },
+    {
+      "username": "bisnet",
+      "password": "123",
+      "namaPerusahaan": "Bisnet",
+      "nomorPerusahaan": "32123",
+      "IsVerified": true
+    }
+  ]

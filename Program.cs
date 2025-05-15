@@ -12,7 +12,8 @@ class Program
         string connectionString = "server=localhost;port=3306;database=pencari_kerja;user=root;password=";
         Database.Init(connectionString);
         // Menerapkan Pemanggilan Api
-
+        ConfigPerusahaan.InitializeDefaultPerusahaan();
+        ConfigLowongan.InitializeDefaultLowongan();
         ConfigPelamar.InitializeDefaultPelamars();
 
 
