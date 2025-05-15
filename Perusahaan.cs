@@ -63,7 +63,6 @@ namespace TubesV3
 
         public void accPelamar(Perusahaan perusahaan)
         {
-            
             List<LowonganPelamar> pelamars = Database.Context.Lamarans
                 .Where(l => l.PerusahaanId == perusahaan.Id)
                 .ToList();
@@ -92,16 +91,22 @@ namespace TubesV3
 
                         if (pelamar != null)
                         {
-                            KaryawanPerusahaan newKaryawan = new KaryawanPerusahaan(pelamar.Id, Id);
+                            // Mengubah status pelamar menjadi Hired
+                            pelamar.Hire();  // Memanggil metode Hire() untuk mengubah status pelamar
+
+                            // Menambahkan pelamar ke dalam daftar karyawan perusahaan
+                            KaryawanPerusahaan newKaryawan = new KaryawanPerusahaan(pelamar.Id, perusahaan.Id);
                             pelamar.status = true;
 
+                            // Menambahkan karyawan ke dalam database
                             Database.Context.KaryawanPerusahaans.Add(newKaryawan);
 
                             var lamaran = Database.Context.Lamarans
-                                .FirstOrDefault(l => l.PelamarId == pelamar.Id && l.PerusahaanId == Id);
+                                .FirstOrDefault(l => l.PelamarId == pelamar.Id && l.PerusahaanId == perusahaan.Id);
 
                             if (lamaran != null)
                             {
+                                // Menghapus lamaran setelah diterima
                                 Database.Context.Lamarans.Remove(lamaran);
                             }
 
@@ -124,8 +129,9 @@ namespace TubesV3
                         if (pelamarDelete != null)
                         {
                             var lamaranToDelete = Database.Context.Lamarans
-                                .FirstOrDefault(l => l.PelamarId == pelamarDelete.Id && l.PerusahaanId == Id);
+                                .FirstOrDefault(l => l.PelamarId == pelamarDelete.Id && l.PerusahaanId == perusahaan.Id);
 
+                            pelamarDelete.Reject();
                             if (lamaranToDelete != null)
                             {
                                 Database.Context.Lamarans.Remove(lamaranToDelete);
@@ -152,6 +158,8 @@ namespace TubesV3
                 input = Console.ReadLine();
             }
         }
+
+
 
     }
 }

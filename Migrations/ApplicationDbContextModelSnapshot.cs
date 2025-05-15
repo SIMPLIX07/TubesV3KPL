@@ -154,8 +154,9 @@ namespace TubesV3.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("state")
-                        .HasColumnType("int");
+                    b.Property<string>("state")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("status")
                         .HasColumnType("tinyint(1)");

@@ -117,7 +117,7 @@ class Program
 
     static void PostLowongan(Perusahaan perusahaan)
     {
-        Console.Write("Judul: ");
+        Console.Write("Posisi: ");
         string judul = Console.ReadLine();
         Console.Write("Kriteria: ");
         string kriteria = Console.ReadLine();
