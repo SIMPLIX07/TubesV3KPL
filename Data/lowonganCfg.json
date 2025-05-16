@@ -1,0 +1,18 @@
+[
+    {
+      "namaPerusahaan": "Telkomsel",
+      "title": "IT",
+      "kriteria": "Pengalaman 1 tahun dibidang IT, Menguasai C#",
+      "deskripsi": "Mengembangkan aplikasi Telkomsel",
+      "lokasi": "Jakarta",
+      "gaji": "Rp 12.000.000 - Rp 15.000.000"
+    },
+    {
+      "namaPerusahaan": "Bisnet",
+      "title": "Data Analyst",
+      "kriteria": "Pengalaman SQL, Python",
+      "deskripsi": "Analisis data bisnis",
+      "lokasi": "Bandung",
+      "gaji": "Rp 10.000.000 - Rp 12.000.000"
+    }
+  ]

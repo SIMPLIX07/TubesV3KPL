@@ -1,0 +1,51 @@
+// ConfigPelamar.cs
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
+
+namespace TubesV3
+{
+    public static class ConfigPelamar
+    {
+        private const string ConfigFile = "Data/pelamarCfg.json";
+        
+        public static void InitializeDefaultPelamars()
+        {
+            try
+            {
+                if (!File.Exists(ConfigFile))
+                {
+                    Console.WriteLine("File konfigurasi pelamar tidak ditemukan.");
+                    return;
+                }
+
+                var jsonData = File.ReadAllText(ConfigFile);
+                var pelamarDefaults = JsonSerializer.Deserialize<List<Pelamar>>(jsonData);
+
+                foreach (var pelamar in pelamarDefaults)
+                {
+                    // Cek apakah pelamar sudah ada di database
+                    var existingPelamar = Database.Context.Pelamars.FirstOrDefault(p => 
+                        p.username == pelamar.username || 
+                        p.namaLengkap == pelamar.namaLengkap);
+                    
+                    if (existingPelamar == null)
+                    {
+                        // Hash password sebelum disimpan (jika menggunakan hashing)
+                        // pelamar.password = BCrypt.HashPassword(pelamar.password);
+                        
+                        Database.Context.Pelamars.Add(pelamar);
+                    }
+                }
+                
+                Database.Context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Gagal memuat konfigurasi pelamar: {ex.Message}");
+            }
+        }
+    }
+}

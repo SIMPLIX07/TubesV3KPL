@@ -6,37 +6,38 @@ namespace TubesV3
     {
         public static List<Perusahaan> legalCompany { get; set; } = new List<Perusahaan>();
 
-        public void initializeDataPerusahaanVerified(List<Perusahaan> verified){
-            foreach(Perusahaan perusahaan in verified){
-               if(perusahaan.IsVerified){
+        public void initializeDataPerusahaanVerified(List<Perusahaan> verified)
+        {
+            legalCompany.Clear(); // penting agar data tidak dobel saat dipanggil ulang
+            foreach (Perusahaan perusahaan in verified)
+            {
+                if (perusahaan.IsVerified)
+                {
                     legalCompany.Add(perusahaan);
-               }
-            }
-        }
-
-        public bool cekPerusahaan(string username, string password) {
-            bool confirmasi = false;
-            foreach (Perusahaan p in legalCompany)
-            {
-                if (p.username == username && p.password == password) {
-                    confirmasi = true;
                 }
             }
-            return confirmasi;
         }
 
-        public Perusahaan cekIdPerusahaan(string nama) {
-            return legalCompany.FirstOrDefault(p => p.namaPerusahaan == nama);
-        }
-
-        public Perusahaan verifPerusahaan(string username, string password) {
+        public bool cekPerusahaan(string username, string password)
+        {
             foreach (Perusahaan p in legalCompany)
             {
-                if (p.username == username && p.password == password) {
-                    return p;
+                if (p.username == username && p.password == password)
+                {
+                    return true;
                 }
             }
-            return null;
+            return false;
+        }
+
+        public Perusahaan verifPerusahaan(string username, string password)
+        {
+            return legalCompany.FirstOrDefault(p => p.username == username && p.password == password);
+        }
+
+        public Perusahaan cekIdPerusahaan(string namaPerusahaan)
+        {
+            return legalCompany.FirstOrDefault(p => p.namaPerusahaan.ToLower() == namaPerusahaan.ToLower());
         }
     }
 }

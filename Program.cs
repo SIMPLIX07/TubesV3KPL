@@ -12,11 +12,17 @@ class Program
         string connectionString = "server=localhost;port=3306;database=pencari_kerja;user=root;password=";
         Database.Init(connectionString);
         // Menerapkan Pemanggilan Api
+        ConfigPerusahaan.InitializeDefaultPerusahaan();
+        ConfigLowongan.InitializeDefaultLowongan();
+        ConfigPelamar.InitializeDefaultPelamars();
+
 
         List<Lowongan> semuaLowongan = Database.Context.Lowongans.ToList();
 
         Admin admin = new Admin("admin", "admin123");
         QueuePerusahaan queue = new QueuePerusahaan();
+
+        
 
         DaftarSemuaPelamar semuaPelamar = new DaftarSemuaPelamar();
         DaftarPerusahaanVerified daftarVerified = new DaftarPerusahaanVerified();

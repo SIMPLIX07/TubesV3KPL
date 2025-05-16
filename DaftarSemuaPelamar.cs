@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace TubesV3
 {
+    
     public class DaftarSemuaPelamar
     {
-        public static List<Pelamar> semuaPelamar = Database.Context.Pelamars.ToList();
+        public static List<Pelamar> semuaPelamar => Database.Context.Pelamars.ToList();
 
         public static Pelamar CocokanPelamar(string nama)
         {
@@ -22,9 +26,21 @@ namespace TubesV3
             return null;
         }
 
+        // Dalam class DaftarSemuaPelamar
+        public static void TampilkanSemuaPelamar()
+        {
+            Console.WriteLine("Daftar Pelamar yang Tersedia:");
+            foreach (var pelamar in semuaPelamar)
+            {
+                Console.WriteLine($"- Username: {pelamar.username}, Nama: {pelamar.namaLengkap}");
+            }
+            Console.WriteLine();
+        }
+
         public static int findPelamarByNama(string nama)
         {
-            foreach(Pelamar pelamar in semuaPelamar){
+            foreach (Pelamar pelamar in semuaPelamar)
+            {
                 if (pelamar.namaLengkap == nama)
                 {
                     return pelamar.Id;
@@ -33,22 +49,27 @@ namespace TubesV3
             return -1;
         }
 
-        public bool verfikasiPelamar(string username, string password) {
+
+        public bool verfikasiPelamar(string username, string password)
+        {
             bool confirmasi = false;
             foreach (Pelamar p in semuaPelamar)
             {
-                if (p.username == username && p.password == password) {
+                if (p.username == username && p.password == password)
+                {
                     confirmasi = true;
                 }
             }
             return confirmasi;
         }
 
-        public Pelamar cariPelamar(string username, string password) {
-            
+        public Pelamar cariPelamar(string username, string password)
+        {
+
             foreach (Pelamar p in semuaPelamar)
             {
-                if (p.username == username && p.password == password){
+                if (p.username == username && p.password == password)
+                {
                     return p;
                 }
             }
