@@ -9,7 +9,7 @@ namespace TubesV3
     public class Menu
     {
         public static void menuLogin() {
-        Console.WriteLine("==== MENU UTAMA ====");
+        Console.WriteLine("\n==== MENU UTAMA ====");
         Console.WriteLine("1. Daftar Perusahaan");
         Console.WriteLine("2. Daftar Pelamar");
         Console.WriteLine("3. Login sebagai Admin");

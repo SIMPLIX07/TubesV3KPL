@@ -32,6 +32,7 @@ namespace TubesV3
                     if (existingPerusahaan == null)
                     {
                         Database.Context.Perusahaans.Add(perusahaan);
+                        Console.WriteLine($"Perusahaan default: {perusahaan.namaPerusahaan}");
                     }
                 }
                 

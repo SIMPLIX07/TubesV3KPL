@@ -42,6 +42,7 @@ namespace TubesV3
                         pelamar.status = false;       // Default status
                         
                         Database.Context.Pelamars.Add(pelamar);
+                        Console.WriteLine($"Pelamar default: {pelamar.namaLengkap}");
                     }
                 }
                 
