@@ -54,23 +54,6 @@ namespace TubesV3
             Database.Context.SaveChanges();
         }
 
-        
-
-        public void Reject()
-        {
-            if (state == "Registered")
-            {
-                state = "Rejected"; 
-                Console.WriteLine($"{namaLengkap} ditolak.");
-            }
-            else
-            {
-                Console.WriteLine($"{namaLengkap} tidak bisa ditolak, status saat ini: {state}");
-            }
-            Database.Context.Entry(this).State = EntityState.Modified;
-            Database.Context.SaveChanges();
-        }
-
 
         public void PrintStatus()
         {

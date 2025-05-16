@@ -83,36 +83,36 @@ namespace TubesV3
             {
                 switch (input)
                 {
-                    case "1":
+                    case "1": 
                         Console.WriteLine("Masukan nama pelamar yang ingin direkrut:");
                         string input2 = Console.ReadLine();
 
-                        Pelamar pelamar = Database.Context.Pelamars.FirstOrDefault(p => p.namaLengkap.ToLower() == input2.ToLower());
+                        Pelamar pelamar = Database.Context.Pelamars
+                            .FirstOrDefault(p => p.namaLengkap.ToLower() == input2.ToLower());
 
                         if (pelamar != null)
                         {
-                            // Mengubah status pelamar menjadi Hired
-                            pelamar.Hire();  // Memanggil metode Hire() untuk mengubah status pelamar
-
-                            // Menambahkan pelamar ke dalam daftar karyawan perusahaan
-                            KaryawanPerusahaan newKaryawan = new KaryawanPerusahaan(pelamar.Id, perusahaan.Id);
-                            pelamar.status = true;
-
-                            // Menambahkan karyawan ke dalam database
-                            Database.Context.KaryawanPerusahaans.Add(newKaryawan);
-
                             var lamaran = Database.Context.Lamarans
                                 .FirstOrDefault(l => l.PelamarId == pelamar.Id && l.PerusahaanId == perusahaan.Id);
 
                             if (lamaran != null)
                             {
-                                // Menghapus lamaran setelah diterima
-                                Database.Context.Lamarans.Remove(lamaran);
+                                pelamar.Hire();
+
+                                lamaran.Hire();
+
+                                KaryawanPerusahaan newKaryawan = new KaryawanPerusahaan(pelamar.Id, perusahaan.Id);
+                                pelamar.status = true;
+
+                                Database.Context.KaryawanPerusahaans.Add(newKaryawan);
+                                Database.Context.SaveChanges();
+
+                                Console.WriteLine("Pelamar berhasil direkrut.");
                             }
-
-                            Database.Context.SaveChanges();
-
-                            Console.WriteLine("Pelamar berhasil direkrut.");
+                            else
+                            {
+                                Console.WriteLine("Lamaran tidak ditemukan.");
+                            }
                         }
                         else
                         {
@@ -120,23 +120,24 @@ namespace TubesV3
                         }
                         break;
 
-                    case "2":
+                    case "2": 
                         Console.WriteLine("Masukan nama pelamar yang ingin dihapus:");
                         string input3 = Console.ReadLine();
 
-                        Pelamar pelamarDelete = Database.Context.Pelamars.FirstOrDefault(p => p.namaLengkap.ToLower() == input3.ToLower());
+                        Pelamar pelamarDelete = Database.Context.Pelamars
+                            .FirstOrDefault(p => p.namaLengkap.ToLower() == input3.ToLower());
 
                         if (pelamarDelete != null)
                         {
                             var lamaranToDelete = Database.Context.Lamarans
                                 .FirstOrDefault(l => l.PelamarId == pelamarDelete.Id && l.PerusahaanId == perusahaan.Id);
 
-                            pelamarDelete.Reject();
                             if (lamaranToDelete != null)
                             {
-                                Database.Context.Lamarans.Remove(lamaranToDelete);
+                                lamaranToDelete.Reject();
                                 Database.Context.SaveChanges();
-                                Console.WriteLine("Lamaran berhasil dihapus.");
+
+                                Console.WriteLine("Lamaran berhasil ditolak dan dihapus.");
                             }
                             else
                             {
@@ -158,7 +159,6 @@ namespace TubesV3
                 input = Console.ReadLine();
             }
         }
-
 
 
     }

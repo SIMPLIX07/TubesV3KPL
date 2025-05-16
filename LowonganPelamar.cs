@@ -17,6 +17,7 @@ namespace TubesV3
 
         public int LowonganId { get; set; }
         public Lowongan Lowongan { get; set; }
+        public string state { get; set; }
 
         public LowonganPelamar() { }
         public LowonganPelamar(int pelamarId, int perusahaanId, int lowonganId)
@@ -24,6 +25,7 @@ namespace TubesV3
             PelamarId = pelamarId;
             PerusahaanId = perusahaanId;
             LowonganId = lowonganId;
+            this.state = "Process";
         }
 
         public static List<LowonganPelamar> semuaLowonganPelamar = Database.Context.Lamarans.ToList();
@@ -47,12 +49,65 @@ namespace TubesV3
         {
             foreach (LowonganPelamar list in listlowongan)
             {
-                if(list.Perusahaan.Id == id){
+                if (list.Perusahaan.Id == id)
+                {
                     Console.WriteLine("Nama: " + list.Pelamar.namaLengkap + "\nPosisi: " + list.Lowongan.title + " \nSkill: " + list.Pelamar.skill + " \nPengalaman: " + list.Pelamar.pengalaman);
                 }
-                
+
             }
-            
+
         }
+
+        public void Hire()
+        {
+            if (state == "Process")
+            {
+                state = "Hired";
+                Console.WriteLine("Pelamar diterima bekerja.");
+
+                var context = Database.Context;
+                context.Lamarans.Attach(this);
+                context.Entry(this).Property(x => x.state).IsModified = true;
+                context.SaveChanges();
+            }
+            else
+            {
+                Console.WriteLine("Pelamar sudah berstatus Hired.");
+            }
+        }
+
+        public void Reject()
+        {
+            if (state == "Process")
+            {
+                state = "Rejected";
+                Console.WriteLine("Pelamar ditolak.");
+
+                try
+                {
+                    var context = Database.Context;
+                    context.Lamarans.Attach(this);
+                    context.Entry(this).Property(x => x.state).IsModified = true;
+                    context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(" Gagal menyimpan status penolakan.");
+                    if (ex.InnerException != null)
+                    {
+                        Console.WriteLine("Detail error: " + ex.InnerException.Message);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error: " + ex.Message);
+                    }
+
+                    // (Opsional) kembalikan status ke "Process"
+                    state = "Process";
+                }
+            }
+        }
+
+
     }
 }
