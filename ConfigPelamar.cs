@@ -1,4 +1,3 @@
-// ConfigPelamar.cs
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,20 +20,26 @@ namespace TubesV3
                     return;
                 }
 
+                var jsonOptions = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    WriteIndented = true
+                };
+
                 var jsonData = File.ReadAllText(ConfigFile);
-                var pelamarDefaults = JsonSerializer.Deserialize<List<Pelamar>>(jsonData);
+                var pelamarDefaults = JsonSerializer.Deserialize<List<Pelamar>>(jsonData, jsonOptions);
 
                 foreach (var pelamar in pelamarDefaults)
                 {
-                    // Cek apakah pelamar sudah ada di database
-                    var existingPelamar = Database.Context.Pelamars.FirstOrDefault(p => 
-                        p.username == pelamar.username || 
-                        p.namaLengkap == pelamar.namaLengkap);
+                    var existingPelamar = Database.Context.Pelamars
+                        .FirstOrDefault(p => p.username == pelamar.username || 
+                                           p.namaLengkap == pelamar.namaLengkap);
                     
                     if (existingPelamar == null)
                     {
-                        // Hash password sebelum disimpan (jika menggunakan hashing)
-                        // pelamar.password = BCrypt.HashPassword(pelamar.password);
+                        // Pastikan state dan status diinisialisasi dengan benar
+                        pelamar.state = "Registered"; // Default state
+                        pelamar.status = false;       // Default status
                         
                         Database.Context.Pelamars.Add(pelamar);
                     }

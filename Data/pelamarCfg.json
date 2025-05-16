@@ -1,16 +1,20 @@
 [
-    {
+  {
       "username": "joko",
       "password": "123",
       "namaLengkap": "Joko Anwar",
       "skill": "C#, GO",
-      "pengalaman": "3 tahun sebagai GO Developer"
-    },
-    {
+      "pengalaman": "3 tahun sebagai GO Developer",
+      "status": false,
+      "state": "Registered"
+  },
+  {
       "username": "ika",
       "password": "123", 
       "namaLengkap": "Ikapuspita",
       "skill": "Java",
-      "pengalaman": "1 tahun sebagai Java Developer"
-    }
-  ]
+      "pengalaman": "1 tahun sebagai Java Developer",
+      "status": false,
+      "state": "Registered"
+  }
+]

@@ -13,8 +13,8 @@ class Program
         Database.Init(connectionString);
         // Menerapkan Pemanggilan Api
         ConfigPerusahaan.InitializeDefaultPerusahaan();
-        ConfigLowongan.InitializeDefaultLowongan();
         ConfigPelamar.InitializeDefaultPelamars();
+        ConfigLowongan.InitializeDefaultLowongan();
 
 
         List<Lowongan> semuaLowongan = Database.Context.Lowongans.ToList();
