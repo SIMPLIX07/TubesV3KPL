@@ -15,11 +15,11 @@ namespace TubesV3
         public string password { get; set; }
         public string namaLengkap { get; set; }
         public bool status { get; set; }
-        public PelamarState state { get; private set; }
+        public string state { get; private set; }
         public string skill { get; set; }
         public string pengalaman { get; set; }
-        
-        public Pelamar(){}
+
+        public Pelamar() { }
         public Pelamar(string username, string password, string namaLengkap, string skill, string pengalaman)
         {
             this.username = username;
@@ -28,7 +28,7 @@ namespace TubesV3
             this.skill = skill;
             this.pengalaman = pengalaman;
             this.status = false;
-            this.state = PelamarState.Registered;
+            this.state = "Registered";
         }
 
 
@@ -37,26 +37,49 @@ namespace TubesV3
             ListLowonganPerusahaan.getAllLowongan();
         }
 
-        
+
         public void Hire()
         {
-            if (state == PelamarState.Registered)
+            if (state == "Registered")
             {
-                state = PelamarState.Hired;
+                state = "Hired";  
                 Console.WriteLine($"{namaLengkap} diterima bekerja.");
             }
             else
             {
                 Console.WriteLine($"{namaLengkap} sudah berstatus Hired.");
             }
+
+            Database.Context.Entry(this).State = EntityState.Modified;
+            Database.Context.SaveChanges();
         }
+
+        
+
+        public void Reject()
+        {
+            if (state == "Registered")
+            {
+                state = "Rejected"; 
+                Console.WriteLine($"{namaLengkap} ditolak.");
+            }
+            else
+            {
+                Console.WriteLine($"{namaLengkap} tidak bisa ditolak, status saat ini: {state}");
+            }
+            Database.Context.Entry(this).State = EntityState.Modified;
+            Database.Context.SaveChanges();
+        }
+
 
         public void PrintStatus()
         {
             Console.WriteLine($"Status {namaLengkap}: {state}");
         }
 
-        
+
+
+
     }
 }
 

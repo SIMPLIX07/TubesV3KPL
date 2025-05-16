@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TubesV3.Migrations
 {
     /// <inheritdoc />
-    public partial class AddnNewPost : Migration
+    public partial class FixAdminModel : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -69,7 +69,8 @@ namespace TubesV3.Migrations
                     namaLengkap = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     status = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    state = table.Column<int>(type: "int", nullable: false),
+                    state = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     skill = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     pengalaman = table.Column<string>(type: "longtext", nullable: false)
