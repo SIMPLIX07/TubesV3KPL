@@ -13,8 +13,8 @@ class Program
         Database.Init(connectionString);
         // Menerapkan Pemanggilan Api
         ConfigPerusahaan.InitializeDefaultPerusahaan();
-        ConfigLowongan.InitializeDefaultLowongan();
         ConfigPelamar.InitializeDefaultPelamars();
+        ConfigLowongan.InitializeDefaultLowongan();
 
 
         List<Lowongan> semuaLowongan = Database.Context.Lowongans.ToList();
@@ -22,7 +22,7 @@ class Program
         Admin admin = new Admin("admin", "admin123");
         QueuePerusahaan queue = new QueuePerusahaan();
 
-        
+
 
         DaftarSemuaPelamar semuaPelamar = new DaftarSemuaPelamar();
         DaftarPerusahaanVerified daftarVerified = new DaftarPerusahaanVerified();
@@ -165,11 +165,16 @@ class Program
         string pengalaman = Console.ReadLine();
 
         Pelamar pelamar = new Pelamar(username, password, namaLengkap, skill, pengalaman);
-
-        Database.Context.Pelamars.Add(pelamar);
-        Database.Context.SaveChanges();
-
-        Console.WriteLine("Pelamar berhasil didaftarkan.\n");
+        if (pelamar != null)
+        {
+            Database.Context.Pelamars.Add(pelamar);
+            Database.Context.SaveChanges();
+            Console.WriteLine("Pelamar berhasil didaftarkan.\n");
+        }
+        else
+        {
+            Console.WriteLine("Pelamar Gagal didaftarkan.\n");
+        }
     }
 
     static void LoginPelamar(DaftarSemuaPelamar semuaPelamar, DaftarPerusahaanVerified daftar)
@@ -198,7 +203,8 @@ class Program
         Dictionary<string, MenuAction> pelamarMenu = new Dictionary<string, MenuAction>
         {
             { "1", () => LihatLowongan(lowongan) },
-            { "2", () => LamarLowongan(pelamar, daftar, lowongan) }
+            { "2", () => LamarLowongan(pelamar, daftar, lowongan) },
+            { "3", () => LowonganDiajukan(pelamar) }
         };
 
         string pilihan = "";
@@ -255,6 +261,11 @@ class Program
         Database.Context.SaveChanges();
 
         Console.WriteLine("Lamaran berhasil diajukan!\n");
+    }
+
+    static void LowonganDiajukan(Pelamar pelamar)
+    {
+        LowonganPelamar.getLowonganPelamarById(pelamar.Id);
     }
 
     static void AdminMenu(Admin admin)

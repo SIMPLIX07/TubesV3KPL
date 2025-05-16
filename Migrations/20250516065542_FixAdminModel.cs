@@ -151,7 +151,9 @@ namespace TubesV3.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     PelamarId = table.Column<int>(type: "int", nullable: false),
                     PerusahaanId = table.Column<int>(type: "int", nullable: false),
-                    LowonganId = table.Column<int>(type: "int", nullable: false)
+                    LowonganId = table.Column<int>(type: "int", nullable: false),
+                    state = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {

@@ -108,6 +108,34 @@ namespace TubesV3
             }
         }
 
+        public static void getLowonganPelamarById(int pelamarId)
+        {
+            List<LowonganPelamar> lowonganPelamar = Database.Context.Lamarans
+                .Where(lp => lp.PelamarId == pelamarId)
+                .ToList();
+
+            if (lowonganPelamar.Count == 0)
+            {
+                Console.WriteLine("Belum ada lamaran yang diajukan.");
+                return;
+            }
+
+            foreach (LowonganPelamar list in lowonganPelamar)
+            {
+                if (list.state == "Hired")
+                {
+                    Console.WriteLine($"Anda Diterima di Perusahaan: {list.Perusahaan.namaPerusahaan}\n");
+                }
+                else if (list.state == "Rejected")
+                {
+                    Console.WriteLine($"Anda Ditolak di Perusahaan: {list.Perusahaan.namaPerusahaan}\n");
+                }
+                else
+                {
+                    Console.WriteLine($"Lamaran Anda Masih Diproses di: {list.Perusahaan.namaPerusahaan}\n");
+                }
+            }
+        }
 
     }
 }

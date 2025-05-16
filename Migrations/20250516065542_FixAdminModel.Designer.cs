@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace TubesV3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250516060346_FixAdminModel")]
+    [Migration("20250516065542_FixAdminModel")]
     partial class FixAdminModel
     {
         /// <inheritdoc />
@@ -121,6 +121,10 @@ namespace TubesV3.Migrations
 
                     b.Property<int>("PerusahaanId")
                         .HasColumnType("int");
+
+                    b.Property<string>("state")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 

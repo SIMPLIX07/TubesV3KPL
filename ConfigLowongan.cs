@@ -42,7 +42,7 @@ namespace TubesV3
                         if (existingLowongan == null)
                         {
                             Database.Context.Lowongans.Add(lowongan);
-                            Console.WriteLine($"Menambahkan lowongan default: {lowongan.title} di {lowongan.namaPerusahaan}");
+                            Console.WriteLine($"Lowongan default: {lowongan.title} di {lowongan.namaPerusahaan}");
                         }
                     }
                 }

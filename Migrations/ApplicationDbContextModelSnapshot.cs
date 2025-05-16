@@ -119,6 +119,10 @@ namespace TubesV3.Migrations
                     b.Property<int>("PerusahaanId")
                         .HasColumnType("int");
 
+                    b.Property<string>("state")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
                     b.HasIndex("LowonganId");
