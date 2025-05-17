@@ -102,7 +102,7 @@ namespace TubesV3
                         Console.WriteLine("Error: " + ex.Message);
                     }
 
-                    // (Opsional) kembalikan status ke "Process"
+                    
                     state = "Process";
                 }
             }

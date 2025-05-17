@@ -22,8 +22,7 @@ namespace TubesV3
 
                 var jsonOptions = new JsonSerializerOptions
                 {
-                    PropertyNameCaseInsensitive = true,
-                    WriteIndented = true
+                    PropertyNameCaseInsensitive = true
                 };
 
                 var jsonData = File.ReadAllText(ConfigFile);
@@ -32,14 +31,14 @@ namespace TubesV3
                 foreach (var pelamar in pelamarDefaults)
                 {
                     var existingPelamar = Database.Context.Pelamars
-                        .FirstOrDefault(p => p.username == pelamar.username || 
-                                           p.namaLengkap == pelamar.namaLengkap);
+                        .FirstOrDefault(p => p.username == pelamar.username);
+                                           
                     
                     if (existingPelamar == null)
                     {
-                        // Pastikan state dan status diinisialisasi dengan benar
-                        pelamar.state = "Registered"; // Default state
-                        pelamar.status = false;       // Default status
+                        
+                        pelamar.state = "Registered"; 
+                        pelamar.status = false;       
                         
                         Database.Context.Pelamars.Add(pelamar);
                         Console.WriteLine($"Pelamar default: {pelamar.namaLengkap}");

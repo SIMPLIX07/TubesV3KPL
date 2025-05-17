@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace TubesV3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250516065542_FixAdminModel")]
+    [Migration("20250516075315_FixAdminModel")]
     partial class FixAdminModel
     {
         /// <inheritdoc />

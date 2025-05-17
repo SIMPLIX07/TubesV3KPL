@@ -26,14 +26,14 @@ namespace TubesV3
 
                 foreach (var lowongan in lowonganDefaults)
                 {
-                    // Cari perusahaan pemilik lowongan
+                    
                     var perusahaan = Database.Context.Perusahaans
                         .FirstOrDefault(p => p.namaPerusahaan == lowongan.namaPerusahaan);
                     
                     if (perusahaan != null)
                     {
-                        // Set ID perusahaan ke lowongan
-                        lowongan.Id = 0; // Reset ID agar dibuat baru
+                        
+                        
                         
                         var existingLowongan = Database.Context.Lowongans
                             .FirstOrDefault(l => l.title == lowongan.title && 

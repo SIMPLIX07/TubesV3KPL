@@ -26,7 +26,7 @@ namespace TubesV3
             return null;
         }
 
-        // Dalam class DaftarSemuaPelamar
+        
         public static void TampilkanSemuaPelamar()
         {
             Console.WriteLine("Daftar Pelamar yang Tersedia:");

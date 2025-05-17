@@ -44,10 +44,6 @@ namespace TubesV3
             {
                 state = "Hired";  
                 Console.WriteLine($"{namaLengkap} diterima bekerja.");
-            } else if (state == "Rejected")
-            {
-                state = "Hired";  
-                Console.WriteLine($"{namaLengkap} diterima bekerja.");
             }
             else
             {

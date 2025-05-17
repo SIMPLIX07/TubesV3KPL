@@ -52,7 +52,7 @@ namespace TubesV3
                     if (input == "Y" || input == "y")
                     {
                         perusahaan.IsVerified = true;
-                        // Jangan save sekarang, tunggu di akhir
+                        
                     }
                     else if (input == "N" || input == "n")
                     {

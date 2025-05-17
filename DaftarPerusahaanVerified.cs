@@ -8,7 +8,7 @@ namespace TubesV3
 
         public void initializeDataPerusahaanVerified(List<Perusahaan> verified)
         {
-            legalCompany.Clear(); // penting agar data tidak dobel saat dipanggil ulang
+            legalCompany.Clear(); 
             foreach (Perusahaan perusahaan in verified)
             {
                 if (perusahaan.IsVerified)

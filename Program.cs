@@ -11,19 +11,15 @@ class Program
     {
         string connectionString = "server=localhost;port=3306;database=pencari_kerja;user=root;password=";
         Database.Init(connectionString);
+
         // Menerapkan Pemanggilan Api
         ConfigPerusahaan.InitializeDefaultPerusahaan();
         ConfigPelamar.InitializeDefaultPelamars();
         ConfigLowongan.InitializeDefaultLowongan();
 
-
         List<Lowongan> semuaLowongan = Database.Context.Lowongans.ToList();
-
         Admin admin = new Admin("admin", "admin123");
         QueuePerusahaan queue = new QueuePerusahaan();
-
-
-
         DaftarSemuaPelamar semuaPelamar = new DaftarSemuaPelamar();
         DaftarPerusahaanVerified daftarVerified = new DaftarPerusahaanVerified();
 
@@ -43,11 +39,17 @@ class Program
             Console.Write("Pilih menu: ");
             pilihan = Console.ReadLine();
 
+            if (string.IsNullOrWhiteSpace(pilihan))
+            {
+                Console.WriteLine("Input tidak boleh kosong!");
+                continue;
+            }
+
             if (mainMenu.ContainsKey(pilihan))
             {
                 mainMenu[pilihan]();
             }
-            else
+            else if (pilihan != "0")
             {
                 Console.WriteLine("Menu tidak ada");
             }
@@ -56,30 +58,52 @@ class Program
         Console.WriteLine("Terima kasih telah menggunakan sistem rekrutmen!");
     }
 
+    static string GetNonEmptyInput(string prompt)
+    {
+        string input;
+        do
+        {
+            Console.Write(prompt);
+            input = Console.ReadLine()?.Trim();
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                Console.WriteLine("Input tidak boleh kosong!");
+            }
+        } while (string.IsNullOrWhiteSpace(input));
+
+        return input;
+    }
+
     static void RegisterPerusahaan()
     {
-        Console.WriteLine("Masukkan Username: ");
-        string usernamePerusahaan = Console.ReadLine();
-        Console.WriteLine("Masukkan Password: ");
-        string passwordPerusahaan = Console.ReadLine();
-        Console.WriteLine("Masukkan Nama Perusahaan: ");
-        string namaPerusahaan = Console.ReadLine();
-        Console.WriteLine("Masukkan Nomor Perusahaan: ");
-        string nomorPerusahaan = Console.ReadLine();
+        string usernamePerusahaan;
+        bool usernameExists;
+        do
+        {
+            usernamePerusahaan = GetNonEmptyInput("Masukkan Username: ");
+            usernameExists = Database.Context.Perusahaans.Any(pr => pr.username == usernamePerusahaan);
+
+            if (usernameExists)
+            {
+                Console.WriteLine("Username sudah digunakan. Silakan coba username lain.");
+            }
+        }
+        while (usernameExists);
+
+        string passwordPerusahaan = GetNonEmptyInput("Masukkan Password: ");
+        string namaPerusahaan = GetNonEmptyInput("Masukkan Nama Perusahaan: ");
+        string nomorPerusahaan = GetNonEmptyInput("Masukkan Nomor Perusahaan: ");
 
         Perusahaan newPerusahaan = new Perusahaan(usernamePerusahaan, passwordPerusahaan, namaPerusahaan, nomorPerusahaan);
         Database.Context.Perusahaans.Add(newPerusahaan);
         Database.Context.SaveChanges();
-        Console.WriteLine("berhasil didaftarkan.\n");
+        Console.WriteLine("Perusahaan berhasil didaftarkan.\n");
     }
 
     static void LoginPerusahaan(DaftarPerusahaanVerified daftarVerified)
     {
-        Console.Write("Username: ");
-        string username = Console.ReadLine();
-        Console.Write("Password: ");
-        string password = Console.ReadLine();
-
+        string username = GetNonEmptyInput("Username: ");
+        string password = GetNonEmptyInput("Password: ");
 
         daftarVerified.initializeDataPerusahaanVerified(Database.Context.Perusahaans.ToList());
 
@@ -107,14 +131,13 @@ class Program
         while (pilihan != "0")
         {
             Menu.menuPerusahaan();
-            Console.Write("Pilih: ");
-            pilihan = Console.ReadLine();
+            pilihan = GetNonEmptyInput("Pilih: ");
 
             if (perusahaanMenu.ContainsKey(pilihan))
             {
                 perusahaanMenu[pilihan]();
             }
-            else
+            else if (pilihan != "0")
             {
                 Console.WriteLine("Pilihan tidak ada");
             }
@@ -123,16 +146,11 @@ class Program
 
     static void PostLowongan(Perusahaan perusahaan)
     {
-        Console.Write("Posisi: ");
-        string judul = Console.ReadLine();
-        Console.Write("Kriteria: ");
-        string kriteria = Console.ReadLine();
-        Console.Write("Deskripsi: ");
-        string deskripsi = Console.ReadLine();
-        Console.Write("Lokasi: ");
-        string lokasi = Console.ReadLine();
-        Console.Write("Gaji: ");
-        string gaji = Console.ReadLine();
+        string judul = GetNonEmptyInput("Posisi: ");
+        string kriteria = GetNonEmptyInput("Kriteria: ");
+        string deskripsi = GetNonEmptyInput("Deskripsi: ");
+        string lokasi = GetNonEmptyInput("Lokasi: ");
+        string gaji = GetNonEmptyInput("Gaji: ");
 
         Lowongan lowongan = new Lowongan(perusahaan.namaPerusahaan, judul, kriteria, deskripsi, lokasi, gaji);
         Database.Context.Lowongans.Add(lowongan);
@@ -153,16 +171,23 @@ class Program
 
     static void RegisterPelamar()
     {
-        Console.WriteLine("Masukkan Username: ");
-        string username = Console.ReadLine();
-        Console.WriteLine("Masukkan Password: ");
-        string password = Console.ReadLine();
-        Console.WriteLine("Masukkan Nama Lengkap: ");
-        string namaLengkap = Console.ReadLine();
-        Console.WriteLine("Masukkan Skill: ");
-        string skill = Console.ReadLine();
-        Console.WriteLine("Masukkan Pengalaman: ");
-        string pengalaman = Console.ReadLine();
+        bool usernameExists;
+        string username;
+        do
+        {
+            username = GetNonEmptyInput("Masukkan Username: ");
+            usernameExists = Database.Context.Pelamars.Any(p => p.username == username);
+            if (usernameExists)
+            {
+                Console.WriteLine("Username sudah digunakan. Silakan coba username lain.");
+            }
+        }
+        while (usernameExists);
+
+        string password = GetNonEmptyInput("Masukkan Password: ");
+        string namaLengkap = GetNonEmptyInput("Masukkan Nama Lengkap: ");
+        string skill = GetNonEmptyInput("Masukkan Skill: ");
+        string pengalaman = GetNonEmptyInput("Masukkan Pengalaman: ");
 
         Pelamar pelamar = new Pelamar(username, password, namaLengkap, skill, pengalaman);
         if (pelamar != null)
@@ -179,10 +204,8 @@ class Program
 
     static void LoginPelamar(DaftarSemuaPelamar semuaPelamar, DaftarPerusahaanVerified daftar)
     {
-        Console.Write("Username: ");
-        string username = Console.ReadLine();
-        Console.Write("Password: ");
-        string password = Console.ReadLine();
+        string username = GetNonEmptyInput("Username: ");
+        string password = GetNonEmptyInput("Password: ");
 
         if (semuaPelamar.verfikasiPelamar(username, password))
         {
@@ -211,14 +234,13 @@ class Program
         while (pilihan != "0")
         {
             Menu.menuPelamar();
-            Console.Write("Pilih: ");
-            pilihan = Console.ReadLine();
+            pilihan = GetNonEmptyInput("Pilih: ");
 
             if (pelamarMenu.ContainsKey(pilihan))
             {
                 pelamarMenu[pilihan]();
             }
-            else
+            else if (pilihan != "0")
             {
                 Console.WriteLine("Pilihan tidak ada");
             }
@@ -236,10 +258,8 @@ class Program
         Lowongan lowongans = new Lowongan();
         lowongans.getAllLowongan(lowongan);
 
-        Console.Write("Nama Perusahaan: ");
-        string perusahaan = Console.ReadLine();
-        Console.Write("Posisi: ");
-        string posisi = Console.ReadLine();
+        string perusahaan = GetNonEmptyInput("Nama Perusahaan: ");
+        string posisi = GetNonEmptyInput("Posisi: ");
 
         Lowongan lowonganDipilih = lowongans.getLowonganByPosisi(posisi, lowongan);
         if (lowonganDipilih == null)
@@ -248,7 +268,6 @@ class Program
             return;
         }
 
-        // Ambil ID perusahaan yang sudah terverifikasi
         Perusahaan perusahaanId = daftar.cekIdPerusahaan(perusahaan);
         if (perusahaanId == null)
         {
@@ -280,14 +299,13 @@ class Program
         while (pilihan != "0")
         {
             Menu.menuAdmin();
-            Console.Write("Pilih: ");
-            pilihan = Console.ReadLine();
+            pilihan = GetNonEmptyInput("Pilih: ");
 
             if (adminMenu.ContainsKey(pilihan))
             {
                 adminMenu[pilihan]();
             }
-            else
+            else if (pilihan != "0")
             {
                 Console.WriteLine("Pilihan tidak ada");
             }
