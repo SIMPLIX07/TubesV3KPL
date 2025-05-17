@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TubesV3.Migrations
 {
     /// <inheritdoc />
-    public partial class FixAdminModel : Migration
+    public partial class FixAdminMode : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

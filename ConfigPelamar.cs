@@ -37,7 +37,6 @@ namespace TubesV3
                     
                     if (existingPelamar == null)
                     {
-                        // Pastikan state dan status diinisialisasi dengan benar
                         pelamar.state = "Registered"; // Default state
                         pelamar.status = false;       // Default status
                         

@@ -80,7 +80,6 @@ class Program
         Console.Write("Password: ");
         string password = Console.ReadLine();
 
-
         daftarVerified.initializeDataPerusahaanVerified(Database.Context.Perusahaans.ToList());
 
         if (daftarVerified.cekPerusahaan(username, password))
