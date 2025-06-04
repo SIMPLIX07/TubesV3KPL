@@ -10,6 +10,7 @@ namespace TubesV3
 {
     public class Pelamar
     {
+        private List<IObserver> _observers = new List<IObserver>();
         public int Id { get; set; }
         public string username { get; set; }
         public string password { get; set; }
@@ -30,6 +31,26 @@ namespace TubesV3
             this.status = false;
             this.state = "Registered";
         }
+        // Attach an observer
+        public void Attach(IObserver observer)
+        {
+            _observers.Add(observer);
+        }
+
+        // Detach an observer
+        public void Detach(IObserver observer)
+        {
+            _observers.Remove(observer);
+        }
+
+        // Notify all observers
+        public void Notify()
+        {
+            foreach (var observer in _observers)
+            {
+                observer.Update(this);  // Notify observers when the state changes
+            }
+        }
 
 
         public static void getAllLowongan()
@@ -44,6 +65,7 @@ namespace TubesV3
             {
                 state = "Hired";  
                 Console.WriteLine($"{namaLengkap} diterima bekerja.");
+                Notify();  
             }
             else
             {

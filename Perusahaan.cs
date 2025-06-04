@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TubesV3
 {
-    public class Perusahaan
+    public class Perusahaan: IObserver
     {
         public int Id { get; set; }
         public string username { get; set; }
@@ -59,6 +59,11 @@ namespace TubesV3
                 }
             }
         }
+        
+        public void Update(Pelamar pelamar)
+        {
+            Console.WriteLine($"Perusahaan {namaPerusahaan} diberitahu: Pelamar {pelamar.namaLengkap} statusnya telah berubah menjadi {pelamar.state}.");
+        }
 
 
         public void accPelamar(Perusahaan perusahaan)
@@ -83,7 +88,7 @@ namespace TubesV3
             {
                 switch (input)
                 {
-                    case "1": 
+                    case "1":
                         Console.WriteLine("Masukan nama pelamar yang ingin direkrut:");
                         string input2 = Console.ReadLine();
 
@@ -120,7 +125,7 @@ namespace TubesV3
                         }
                         break;
 
-                    case "2": 
+                    case "2":
                         Console.WriteLine("Masukan nama pelamar yang ingin dihapus:");
                         string input3 = Console.ReadLine();
 

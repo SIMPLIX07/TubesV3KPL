@@ -22,6 +22,19 @@ class Program
         QueuePerusahaan queue = new QueuePerusahaan();
         DaftarSemuaPelamar semuaPelamar = new DaftarSemuaPelamar();
         DaftarPerusahaanVerified daftarVerified = new DaftarPerusahaanVerified();
+        Perusahaan perusahaan = new Perusahaan("company1", "password", "TechCorp", "123456789");
+
+        // Membuat objek pelamar (subject)
+        Pelamar pelamar = new Pelamar("johndoe", "password123", "John Doe", "C#", "3 years");
+
+        // Menambahkan Admin dan Perusahaan sebagai observer ke Pelamar
+        pelamar.Attach(admin);  // Menambahkan Admin sebagai observer
+        pelamar.Attach(perusahaan);  // Menambahkan Perusahaan sebagai observer
+
+        // Mengubah status pelamar menjadi "Hired"
+        Console.WriteLine("\nMenerima pelamar...");
+        pelamar.Hire();  // Ini akan memberi tahu Admin dan Perusahaan
+
 
         Dictionary<string, MenuAction> mainMenu = new Dictionary<string, MenuAction>
         {
