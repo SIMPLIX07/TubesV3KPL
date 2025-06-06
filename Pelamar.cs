@@ -71,9 +71,6 @@ namespace TubesV3
             {
                 Console.WriteLine($"{namaLengkap} sudah berstatus Hired.");
             }
-
-            Database.Context.Entry(this).State = EntityState.Modified;
-            Database.Context.SaveChanges();
         }
 
 
