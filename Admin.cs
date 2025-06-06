@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TubesV3
 {
-    public class Admin
+    public class Admin: IObserver
     {
         public int Id { get; set; }
         public string username { get; private set; }
@@ -52,7 +52,7 @@ namespace TubesV3
                     if (input == "Y" || input == "y")
                     {
                         perusahaan.IsVerified = true;
-                        
+
                     }
                     else if (input == "N" || input == "n")
                     {
@@ -68,6 +68,11 @@ namespace TubesV3
                 Database.Context.Perusahaans.RemoveRange(notVerified);
             }
             Database.Context.SaveChanges();
+        }
+        // Implementation of Update method from IObserver
+        public void Update(Pelamar pelamar)
+        {
+            Console.WriteLine($"Admin diberitahu: Pelamar {pelamar.namaLengkap} statusnya telah berubah menjadi {pelamar.state}.");
         }
 
     }
